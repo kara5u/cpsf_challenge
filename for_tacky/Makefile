@@ -10,7 +10,6 @@ OBJS= $(SRCS:.c=.o)
 
 # common (*.o)
 LD= gcc
-LDFLAGS= -g $(DEBUG)
 LDLIBS= -lm
 
 # *.c
@@ -18,4 +17,4 @@ CC = gcc
 
 # run
 $(PACKAGE):$(OBJS)
-	$(CC) -o $(NAME) $(SRCS)
+	$(CC) -o $(NAME) -g -O0 $(SRCS)
