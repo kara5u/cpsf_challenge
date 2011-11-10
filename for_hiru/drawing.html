@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>お絵かき</title>
+        <script type="text/javascript">
+            // ページがloadされたら"drawingCanvas"にマウスイベントリスナを追加する
+            // useCapture=trueに関してはhttps://developer.mozilla.org/ja/DOM/element.addEventListener らへんを読むこと
+            // 読んでもわからなかった<-new!!
+            
+            // グローバル変数
+            var isDrawing = false;
+            var prevX = 0;
+            var prevY = 0;
+            window.addEventListener("load", function(){
+                    var _canvas = document.getElementById("drawingCanvas");
+                    // マウスが動いたらdraw関数を呼び出すよ
+                    _canvas.addEventListener("mousemove", draw, true);
+                    _canvas.addEventListener("mousedown", mouseDown, false); // falseにするとどうなるのかよくわからない
+                    _canvas.addEventListener("mouseup", mouseUp, false);
+                }, true);
+            
+            function mouseDown(_event) {
+                isDrawing = true;
+                prevX = _event.clientX;
+                prevY = _event.clientY;
+            }
+
+            function mouseUp() {
+                isDrawing = false;
+            }
+
+            function draw(_event) {
+                if (!isDrawing) return;
+                // マウスの座標を取ってくる
+                var _x = _event.clientX;
+                var _y = _event.clientY;
+                // drawingCanvasを初期化
+                var _canvas = document.getElementById("drawingCanvas");
+                var _context = _canvas.getContext("2d");
+                // マウスを動かした分だけ線分をつなぐ
+                _context.strokeStyle = "rgba(0,0,0,1)"; // 色を設定
+                _context.beginPath();
+                _context.moveTo(prevX, prevY); // 一つ前の座標に移動
+                _context.lineTo(_x, _y); // 線を描く
+                _context.stroke(); // ストローク
+                _context.closePath();
+                prevX = _x; // 値を更新
+                prevY = _y;
+            } 
+        </script>
+    </head>
+    <body>
+        <canvas id="drawingCanvas" width="640" height="480"></canvas>
+    </body>
+</head>
